@@ -1,0 +1,33 @@
+{
+    "name": "konhub/lido",
+    "description": "Convert Lido JS JSON designs to responsive HTML layouts",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Konhub\\Lido\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "your@email.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0|^9.0|^10.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Konhub\\Lido\\LidoServiceProvider"
+            ],
+            "aliases": {
+                "LidoConverter": "Konhub\\Lido\\Facades\\LidoConverter"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

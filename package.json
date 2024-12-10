@@ -1,0 +1,12 @@
+{
+  "name": "konhub-lido",
+  "version": "1.0.0",
+  "description": "Convert Lido JS JSON designs to responsive HTML layouts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["lido", "html", "converter", "layout"],
+  "author": "",
+  "license": "MIT"
+}
