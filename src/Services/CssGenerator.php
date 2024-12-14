@@ -48,7 +48,7 @@ class CssGenerator
 
             [class*="store_"] {
                 transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
-                max-width: 100%;
+
             }
 
             .responsive-grid {

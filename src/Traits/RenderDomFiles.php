@@ -3,6 +3,7 @@
 namespace Konhub\Lido\Traits;
 
 use Konhub\Lido\Services\CssFormatter;
+use Konhub\Lido\Services\CssStateManager;
 use Illuminate\Support\Facades\File;
 
 trait RenderDomFiles
@@ -22,7 +23,7 @@ trait RenderDomFiles
 
         $formatter = new CssFormatter();
         $cssFilePath = $path_css . self::$file_name_css;
-        $formattedCss = $formatter->format(self::$template_css);
+        $formattedCss = $formatter->format(CssStateManager::getInstance()->getTemplateCss());
         File::put(public_path($cssFilePath), $formattedCss);
 
         return new static();

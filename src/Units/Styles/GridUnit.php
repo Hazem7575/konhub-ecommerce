@@ -99,39 +99,56 @@ class GridUnit
         return 'grid-template-rows: ' . trim($style) . ';';
     }
 
-    private static function getResponsiveStyles()
+    protected static function getResponsiveStyles()
     {
+        // ترتيب العناصر حسب موقعها العمودي
+        $sortedElements = [];
+        foreach (static::$childRows as $child) {
+            if ($child['type'] === 'row-start') {
+                $sortedElements[] = [
+                    'id' => $child['id'],
+                    'y' => $child['y']
+                ];
+            }
+        }
+
+        // ترتيب العناصر تصاعدياً حسب قيمة y
+        usort($sortedElements, function($a, $b) {
+            return $a['y'] <=> $b['y'];
+        });
+
+        // إنشاء CSS order للعناصر
+        $orderStyles = '';
+        foreach ($sortedElements as $index => $element) {
+            $orderStyles .= "[data-element-id='{$element['id']}'] { order: {$index}; }\n";
+        }
+
         return "
             @media (max-width: 768px) {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
-                grid-template-rows: auto !important;
-                gap: 1rem;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1rem !important;
                 padding: 1rem;
 
                 > * {
-                    grid-column: auto !important;
-                    grid-row: auto !important;
                     width: 100% !important;
-                    max-width: 100% !important;
-                    margin-bottom: 1rem;
                     position: relative !important;
                     left: auto !important;
                     top: auto !important;
                     transform: none !important;
                 }
-            }
 
-            @media (min-width: 769px) and (max-width: 1024px) {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 1rem;
+                /* تطبيق الترتيب الجديد */
+                {$orderStyles}
 
-                > * {
-                    width: 100% !important;
-                    max-width: 100% !important;
+                /* تعديل حجم الخط */
+                [class*='store_'] {
+                    font-size: calc(var(--font-size) * 0.8) !important;
                 }
             }
         ";
     }
+
 
     private static function applyGridPositionsToChildren(&$collection, $children, $type)
     {

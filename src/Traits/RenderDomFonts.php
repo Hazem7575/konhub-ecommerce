@@ -3,6 +3,7 @@
 namespace Konhub\Lido\Traits;
 
 use Illuminate\Support\Facades\File;
+use Konhub\Lido\Services\CssStateManager;
 
 trait RenderDomFonts
 {
@@ -95,9 +96,7 @@ trait RenderDomFonts
 
     public function render()
     {
-        if (isset(self::$template_css)) {
-            self::$template_css .= self::$fonts_css;
-        }
+        CssStateManager::getInstance()->appendTemplateCss(self::$fonts_css);
         return self::$fonts_css;
     }
 

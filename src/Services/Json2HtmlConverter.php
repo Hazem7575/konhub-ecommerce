@@ -25,9 +25,7 @@ class Json2HtmlConverter
 
     protected static $template;
     protected static $paths_dir;
-    protected static $template_css;
     protected static $size_layer;
-
     protected static $width_layers = [];
     protected static $fonts = [];
     protected static $fonts_css = '';
@@ -67,6 +65,10 @@ class Json2HtmlConverter
                 'width' => $width,
                 'height' => $height,
             ];
+
+            // Set layer size in CssStateManager
+            CssStateManager::getInstance()->setLayerSize(self::$size_layer);
+
             $html .= self::buildRoot($root, 'ROOT', $first);
         }
 
