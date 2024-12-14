@@ -2,6 +2,8 @@
 
 namespace Konhub\Lido\Services;
 
+use Konhub\Lido\Managers\NestedElementsManager;
+use Konhub\Lido\Managers\ResponsiveManager;
 use Konhub\Lido\Traits\RenderDomCss;
 use Konhub\Lido\Traits\RenderDomFiles;
 use Konhub\Lido\Traits\RenderDomFonts;
@@ -30,13 +32,24 @@ class Json2HtmlConverter
     protected static $fonts = [];
     protected static $fonts_css = '';
 
+    private $elementManager;
+    private $styleGenerator;
+    private $nestedElementsManager;
+    private $responsiveManager;
+
     public function __construct()
     {
+//        $this->elementManager = new ElementManager();
+//        $this->styleGenerator = new StyleGenerator();
+//        $this->nestedElementsManager = new NestedElementsManager();
+//        $this->responsiveManager = new ResponsiveManager();
+
         self::$paths_dir = config('lido.paths', [
             'path_css' => '/test/css/',
             'path_js' => '/test/js/',
             'path_font' => '/test/fonts',
         ]);
+
     }
 
     public function convert($json)
@@ -84,6 +97,7 @@ class Json2HtmlConverter
 
     public static function buildRoot($child, $index, &$collection)
     {
+
         $is_root = $child['type']['resolvedName'] == 'RootLayer';
         $style = self::shaps($child, $collection);
 
@@ -102,6 +116,7 @@ class Json2HtmlConverter
                 $html .= RenderElement::render($child);
             }
         }
+
 
         $html .= '<div class="' . $class_name . '">';
 
@@ -140,7 +155,7 @@ class Json2HtmlConverter
         self::put_size($style_1, $class_name, $child);
         self::put_size($style['style'], $class_name2, $child);
 
-        $html = '<div class="' . $class_name . '">';
+        $html = '<div data-element-id="' . $index . '" class="' . $class_name . '">';
         $html .= '<div class="' . $class_name2 . '">';
 
         if (isset($style['children']) && is_array($style['children']) && count($style['children']) > 0) {
@@ -217,5 +232,15 @@ class Json2HtmlConverter
         return [
             'class' => $class_name
         ];
+    }
+
+
+    protected function processElements($elements)
+    {
+        $sortedElements = ElementOrderManager::sortElementsByPosition($elements);
+
+        foreach ($sortedElements as $element) {
+            $this->processElement($element);
+        }
     }
 }
